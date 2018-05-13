@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Mail\UserRegistered;
 use App\User;
 use App\Http\Controllers\Controller;
-use http\Env\Response;
+use App\UserRegistrationLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -100,11 +100,24 @@ class RegisterController extends Controller
 	{
 		$this->validator($request->all())->validate();
 		$user = $this->create($request->all());
+		$this->registrationLog($request->all());
 
 		Mail::to($user)->send(new UserRegistered($user));
 		$request->session()->flash('message', 'A confirmation letter has been sent to your address.');
 
 		return back();
+	}
+
+	/**
+	 * Log registration
+	 * @param array $data
+	 *
+	 * @return void
+	 * */
+	protected function registrationLog(array $data){
+		UserRegistrationLog::create([
+			'email' => $data['email']
+		]);
 	}
 
 }
