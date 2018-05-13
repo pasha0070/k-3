@@ -1,5 +1,4 @@
 <?php
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -10,10 +9,11 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 Route::get('/', function () {
 	return view('welcome');
 });
+
+Route::get('register/confirm/{token}', 'Auth\RegisterController@confirmEmail');
 
 Auth::routes();
 
